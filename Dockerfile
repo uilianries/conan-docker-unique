@@ -15,7 +15,7 @@ RUN dpkg --add-architecture i386 \
        wget \
        git \
        libc6-dev-i386 \
-       g++-multilib \
+       gcc \
        libgmp-dev \
        libmpfr-dev \
        libmpc-dev \
@@ -44,11 +44,12 @@ RUN dpkg --add-architecture i386 \
 RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
     && tar zxf /tmp/gcc-10.1.0.tar.gz -C /tmp \
     && cd /tmp/gcc-releases-gcc-10.1.0 \
-    && SED=sed ./configure --prefix=/usr --enable-languages=c,c++ --disable-bootstrap --with-system-zlib \
-    && make \
+    && SED=sed ./configure --prefix=/usr --enable-languages=c,c++ --disable-bootstrap --with-system-zlib --enable-multiarch --disable-multilib \
+    && make -j "$(nproc)" \
     && make install \
     && cd - \
-    && rm -rf /tmp/gcc*
+    && rm -rf /tmp/gcc* \
+    && apt-get remove -y gcc
 
 RUN wget -q --no-check-certificate https://cmake.org/files/v3.17/cmake-3.17.2-Linux-x86_64.tar.gz \
     && tar -xzf cmake-3.17.2-Linux-x86_64.tar.gz \
