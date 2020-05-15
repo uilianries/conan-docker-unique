@@ -38,6 +38,7 @@ RUN dpkg --add-architecture i386 \
        liblzma-dev \
        ca-certificates \
        autoconf-archive \
+       flex \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
