@@ -42,10 +42,12 @@ RUN dpkg --add-architecture i386 \
 
 RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
     && tar zxf /tmp/gcc-10.1.0.tar.gz -C /tmp \
-    && pushd /tmp/gcc-releases-gcc-10.1.0 \
+    && cd /tmp/gcc-releases-gcc-10.1.0 \
     && SED=sed ./configure --prefix=/usr --enable-languages=c,c++ --disable-bootstrap --with-system-zlib \
     && make \
-    && make install
+    && make install \
+    && cd - \
+    && rm -rf /tmp/gcc*
 
 RUN wget -q --no-check-certificate https://cmake.org/files/v3.17/cmake-3.17.2-Linux-x86_64.tar.gz \
     && tar -xzf cmake-3.17.2-Linux-x86_64.tar.gz \
