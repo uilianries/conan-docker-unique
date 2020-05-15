@@ -1,0 +1,11 @@
+FROM uilianries:docker-builder-baser
+
+RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
+    && tar zxf /tmp/gcc-10.1.0.tar.gz -C /tmp \
+    && cd /tmp/gcc-releases-gcc-10.1.0 \
+    && SED=sed ./configure --prefix=/usr --enable-languages=c,c++ --disable-bootstrap --with-system-zlib --enable-multiarch --disable-multilib \
+    && make -j "$(nproc)" \
+    && sudo make install \
+    && cd - \
+    && rm -rf /tmp/gcc* \
+    && sudo apt-get remove -y gcc
