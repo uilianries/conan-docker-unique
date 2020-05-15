@@ -6,11 +6,11 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Build Base Docker image
-      run: docker build Dockerfile.base -t uilianries/docker-builder-base
+      run: docker build -f Dockerfile.base -t uilianries/docker-builder-base
     - name: Inspect Base Docker image
       run: docker inspect uilianries/docker-builder-base
     - name: Build GCC 10 Docker image
-      run: docker build Dockerfile.gcc10 -t uilianries/gcc10
+      run: docker build -f Dockerfile.gcc10 -t uilianries/gcc10
     - name: Inspect Docker image GCC10
       run: docker inspect uilianries/gcc10
   deploy:
