@@ -40,14 +40,21 @@ RUN dpkg --add-architecture i386 \
        autoconf-archive \
     && rm -rf /var/lib/apt/lists/*
 
-RUN wget -q --no-check-certificate https://cmake.org/files/v3.16/cmake-3.16.4-Linux-x86_64.tar.gz \
-    && tar -xzf cmake-3.16.4-Linux-x86_64.tar.gz \
+RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
+    && tar zxf /tmp/gcc-10.1.0.tar.gz -C /tmp \
+    && pushd /tmp/gcc-releases-gcc-10.1.0 \
+    && SED=sed ./configure --prefix=/usr --enable-languages=c,c++ --disable-bootstrap --with-system-zlib \
+    && make \
+    && make install
+
+RUN wget -q --no-check-certificate https://cmake.org/files/v3.17/cmake-3.17.2-Linux-x86_64.tar.gz \
+    && tar -xzf cmake-3.17.2-Linux-x86_64.tar.gz \
        --exclude=bin/cmake-gui \
        --exclude=doc/cmake \
        --exclude=share/cmake-3.12/Help \
-    && cp -fR cmake-3.16.4-Linux-x86_64/* /usr \
-    && rm -rf cmake-3.16.4-Linux-x86_64 \
-    && rm cmake-3.16.4-Linux-x86_64.tar.gz
+    && cp -fR cmake-3.17.2-Linux-x86_64/* /usr \
+    && rm -rf cmake-3.17.2-Linux-x86_64 \
+    && rm cmake-3.17.2-Linux-x86_64.tar.gz
 
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
@@ -63,8 +70,8 @@ RUN wget --no-check-certificate --quiet -O /tmp/pyenv-installer https://github.c
     && /tmp/pyenv-installer \
     && rm /tmp/pyenv-installer \
     && update-alternatives --install /usr/bin/pyenv pyenv /opt/pyenv/bin/pyenv 100 \
-    && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.7.5 \
-    && pyenv global 3.7.5 \
+    && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.1 \
+    && pyenv global 3.8.1 \
     && pip install -q --upgrade --no-cache-dir pip \
     && pip install -q --no-cache-dir conan conan-package-tools \
     && chown -R conan:1001 /opt/pyenv \
@@ -74,13 +81,6 @@ RUN wget --no-check-certificate --quiet -O /tmp/pyenv-installer https://github.c
     && update-alternatives --install /usr/bin/python3 python3 /opt/pyenv/shims/python3 100 \
     && update-alternatives --install /usr/bin/pip pip /opt/pyenv/shims/pip 100 \
     && update-alternatives --install /usr/bin/pip3 pip3 /opt/pyenv/shims/pip3 100
-
-RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
-    && tar zxf /tmp/gcc-10.1.0.tar.gz -C /tmp \
-    && pushd /tmp/gcc-releases-gcc-10.1.0 \
-    && SED=sed ./configure --prefix=/usr --enable-languages=c,c++ --disable-bootstrap --with-system-zlib \
-    && make \
-    && make install
 
 USER conan
 WORKDIR /home/conan
