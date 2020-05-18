@@ -13,11 +13,6 @@ jobs:
       run: docker build . -f Dockerfile.gcc10 -t uilianries/gcc10
     - name: Inspect Docker image GCC10
       run: docker inspect uilianries/gcc10
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - uses: actions/checkout@master
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
