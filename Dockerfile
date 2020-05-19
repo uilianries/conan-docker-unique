@@ -50,6 +50,32 @@ RUN wget -q --no-check-certificate https://cmake.org/files/v3.17/cmake-3.17.2-Li
     && rm -rf cmake-3.17.2-Linux-x86_64 \
     && rm cmake-3.17.2-Linux-x86_64.tar.gz
 
+RUN wget --no-check-certificate --quiet -O /tmp/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
+    && tar zxf /tmp/gcc-10.1.0.tar.gz -C /tmp \
+    && cd /tmp/gcc-releases-gcc-10.1.0 \
+    && ./configure --prefix=/usr \
+                   --enable-languages=c,c++ \
+                   --disable-bootstrap \
+                   --with-system-zlib \
+                   --enable-multiarch \
+                   --disable-multilib \
+                   --enable-shared \
+                   --enable-threads=posix \
+                   --build=x86_64-linux-gnu \
+                   --host=x86_64-linux-gnu \
+                   --target=x86_64-linux-gnu \
+                   --without-included-gettext \
+                   --with-tune=generic \
+                   --with-gmp=/usr/local/lib \
+                   --with-mpc=/usr/lib \
+                   --with-mpfr=/usr/lib \
+                   --disable-checking \
+    && make -j "$(nproc)" \
+    && make install \
+    && cd - \
+    && rm -rf /tmp/gcc* \
+    && sudo apt-get remove -y gcc g++
+
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
     && groupadd 2000 -g 2000 \
