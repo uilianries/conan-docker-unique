@@ -1,16 +1,12 @@
 name: Build and Deploy
 on: [push]
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Build Base Docker image
-      run: docker build . -f Dockerfile.base -t uilianries/docker-builder-base
-    - name: Inspect Base Docker image
-      run: docker inspect uilianries/docker-builder-base
-    - name: Build GCC 10 Docker image
-      run: docker build . -f Dockerfile.gcc10 -t uilianries/gcc10
+      run: docker build . -t uilianries/gcc10
     - name: Inspect Docker image GCC10
       run: docker inspect uilianries/gcc10
     - name: Docker login
