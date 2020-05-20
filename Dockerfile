@@ -71,9 +71,12 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
                    --with-mpfr=/usr/lib \
                    --disable-checking \
     && make -j "$(nproc)" \
+    && apt-get remove -y gcc \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && make install \
     && cd - \
-    && rm -rf /opt/gcc*
+    && rm -rf /opt/gcc* \
+    && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 100
 
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
@@ -84,26 +87,26 @@ RUN groupadd 1001 -g 1001 \
     && adduser conan sudo \
     && printf "conan ALL= NOPASSWD: ALL\\n" >> /etc/sudoers
 
-# RUN wget --no-check-certificate --quiet -O /tmp/pyenv-installer https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer \
-#     && chmod +x /tmp/pyenv-installer \
-#     && /tmp/pyenv-installer \
-#     && rm /tmp/pyenv-installer \
-#     && update-alternatives --install /usr/bin/pyenv pyenv /opt/pyenv/bin/pyenv 100 \
-#     && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.1 \
-#     && pyenv global 3.8.1 \
-#     && pip install -q --upgrade --no-cache-dir pip \
-#     && pip install -q --no-cache-dir conan conan-package-tools \
-#     && chown -R conan:1001 /opt/pyenv \
-#     # remove all __pycache__ directories created by pyenv
-#     && find /opt/pyenv -iname __pycache__ -print0 | xargs -0 rm -rf \
-#     && update-alternatives --install /usr/bin/python python /opt/pyenv/shims/python 100 \
-#     && update-alternatives --install /usr/bin/python3 python3 /opt/pyenv/shims/python3 100 \
-#     && update-alternatives --install /usr/bin/pip pip /opt/pyenv/shims/pip 100 \
-#     && update-alternatives --install /usr/bin/pip3 pip3 /opt/pyenv/shims/pip3 100
+RUN wget --no-check-certificate --quiet -O /tmp/pyenv-installer https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer \
+    && chmod +x /tmp/pyenv-installer \
+    && /tmp/pyenv-installer \
+    && rm /tmp/pyenv-installer \
+    && update-alternatives --install /usr/bin/pyenv pyenv /opt/pyenv/bin/pyenv 100 \
+    && PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.1 \
+    && pyenv global 3.8.1 \
+    && pip install -q --upgrade --no-cache-dir pip \
+    && pip install -q --no-cache-dir conan conan-package-tools \
+    && chown -R conan:1001 /opt/pyenv \
+    # remove all __pycache__ directories created by pyenv
+    && find /opt/pyenv -iname __pycache__ -print0 | xargs -0 rm -rf \
+    && update-alternatives --install /usr/bin/python python /opt/pyenv/shims/python 100 \
+    && update-alternatives --install /usr/bin/python3 python3 /opt/pyenv/shims/python3 100 \
+    && update-alternatives --install /usr/bin/pip pip /opt/pyenv/shims/pip 100 \
+    && update-alternatives --install /usr/bin/pip3 pip3 /opt/pyenv/shims/pip3 100
 
 USER conan
 WORKDIR /home/conan
 
-RUN mkdir -p /home/conan/.conan
-#     && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \
-#     && printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc
+RUN mkdir -p /home/conan/.conan \
+    && printf 'eval "$(pyenv init -)"\n' >> ~/.bashrc \
+    && printf 'eval "$(pyenv virtualenv-init -)"\n' >> ~/.bashrc
