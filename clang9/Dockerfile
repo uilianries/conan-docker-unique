@@ -36,8 +36,8 @@ RUN apt-get install -y --no-install-recommends \
 
     # Further LLVM packages not installed by the llvm.sh script
 RUN apt-get install -y --no-install-recommends \
-       libc++-10-dev \
-       libc++abi-10-dev \
+       libc++-9-dev \
+       libc++abi-9-dev \
     && apt-get remove -y lsb-release software-properties-common
 
     # Install dependencies of Python
