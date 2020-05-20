@@ -3,7 +3,7 @@ FROM ubuntu:xenial
 LABEL maintainer="Conan.io <info@conan.io>"
 
 ENV PYENV_ROOT=/opt/pyenv \
-    PATH=/opt/pyenv/shims:${PATH} \
+    PATH=/opt/pyenv/shims:/usr/local/bin:${PATH} \
     CXX=/usr/bin/g++ \
     CC=/usr/bin/gcc
 
@@ -14,7 +14,6 @@ RUN apt-get -qq update \
        wget \
        git \
        libc6-dev \
-       libstdc++-dev \
        gcc \
        libgmp-dev \
        libmpfr-dev \
@@ -53,7 +52,7 @@ RUN wget -q --no-check-certificate https://cmake.org/files/v3.17/cmake-3.17.2-Li
 RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
     && tar zxf /opt/gcc-10.1.0.tar.gz -C /opt \
     && cd /opt/gcc-releases-gcc-10.1.0 \
-    && ./configure --prefix=/usr \
+    && ./configure --prefix=/usr/local \
                    --enable-languages=c,c++ \
                    --disable-bootstrap \
                    --with-system-zlib \
@@ -76,7 +75,8 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
     && make install \
     && cd - \
     && rm -rf /opt/gcc* \
-    && update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 100
+    && update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100 \
+    && printf "/usr/local/lib" >> /etc/ld.so.conf
 
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
