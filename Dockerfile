@@ -70,12 +70,16 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
                    --with-mpfr=/usr/lib \
                    --disable-checking \
     && make -j "$(nproc)" \
-    && apt-get remove -y gcc \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && make install \
     && cd - \
     && rm -rf /opt/gcc* \
+    && apt-get remove -y gcc \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && update-alternatives --install /usr/bin/gcc gcc /usr/local/bin/gcc 100 \
     && update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100 \
+    && update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++ 100 \
+    && update-alternatives --install /usr/bin/c++ c++ /usr/local/bin/g++ 100 \
+    && update-alternatives --install /usr/bin/cpp cpp /usr/local/bin/g++ 100 \
     && printf "/usr/local/lib" >> /etc/ld.so.conf \
     && ldconfig
 
