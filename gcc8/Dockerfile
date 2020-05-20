@@ -4,8 +4,8 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ENV PYENV_ROOT=/opt/pyenv \
     PATH=/opt/pyenv/shims:/usr/local/bin:${PATH} \
-    CXX=/usr/local/bin/g++ \
-    CC=/usr/local/bin/gcc
+    CXX=/usr/bin/g++ \
+    CC=/usr/bin/gcc
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
