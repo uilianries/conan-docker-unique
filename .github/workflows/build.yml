@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        compiler: [gcc10]
+        compiler: [gcc10, gcc9, gcc8]
     steps:
     - uses: actions/checkout@master
     - name: Build Docker image uilianries/${{ matrix.compiler }}
