@@ -7,14 +7,14 @@ ENV PYENV_ROOT=/opt/pyenv \
     CXX=/usr/bin/g++ \
     CC=/usr/bin/gcc
 
-RUN dpkg --add-architecture i386 \
-    && apt-get -qq update \
+RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
        sudo \
        build-essential \
        wget \
        git \
-       libc6-dev-i386 \
+       libc6-dev \
+       libstdc++-dev \
        gcc \
        libgmp-dev \
        libmpfr-dev \
