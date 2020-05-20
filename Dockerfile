@@ -76,7 +76,8 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
     && cd - \
     && rm -rf /opt/gcc* \
     && update-alternatives --install /usr/bin/cc cc /usr/local/bin/gcc 100 \
-    && printf "/usr/local/lib" >> /etc/ld.so.conf
+    && printf "/usr/local/lib" >> /etc/ld.so.conf \
+    && ldconfig
 
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
