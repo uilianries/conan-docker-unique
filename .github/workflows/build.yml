@@ -29,4 +29,4 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       run: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
     - name: Docker Upload image uilianries/${{ matrix.compiler }}
-      run: docker push uilianries/gcc10
+      run: docker push uilianries/${{ matrix.compiler }}
