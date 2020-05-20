@@ -18,10 +18,13 @@ jobs:
         docker exec runner-${{ matrix.compiler }} conan profile new default --detect
         docker exec runner-${{ matrix.compiler }} conan install lz4/1.9.2@ -s build_type=Release --build
         docker exec runner-${{ matrix.compiler }} conan install lz4/1.9.2@ -s build_type=Debug --build
+        docker exec runner-${{ matrix.compiler }} conan install lz4/1.9.2@ -s build_type=Release --build -o lz4:shared=True
         docker exec runner-${{ matrix.compiler }} conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++ -s build_type=Release
         docker exec runner-${{ matrix.compiler }} conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++11 -s build_type=Release
         docker exec runner-${{ matrix.compiler }} conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++ -s build_type=Debug
         docker exec runner-${{ matrix.compiler }} conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++11 -s build_type=Debug
+        docker exec runner-${{ matrix.compiler }} conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++ -s build_type=Release -o lz4:shared=True
+        docker exec runner-${{ matrix.compiler }} conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++11 -s build_type=Release -o lz4:shared=True
         docker stop runner-${{ matrix.compiler }}
     - name: Docker login
       env:
