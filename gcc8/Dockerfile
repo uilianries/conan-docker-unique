@@ -4,8 +4,8 @@ LABEL maintainer="Conan.io <info@conan.io>"
 
 ENV PYENV_ROOT=/opt/pyenv \
     PATH=/opt/pyenv/shims:/usr/local/bin:${PATH} \
-    CXX=/usr/bin/g++ \
-    CC=/usr/bin/gcc
+    CXX=/usr/local/bin/g++ \
+    CC=/usr/local/bin/gcc
 
 RUN apt-get -qq update \
     && apt-get -qq install -y --no-install-recommends \
@@ -49,9 +49,9 @@ RUN wget -q --no-check-certificate https://cmake.org/files/v3.17/cmake-3.17.2-Li
     && rm -rf cmake-3.17.2-Linux-x86_64 \
     && rm cmake-3.17.2-Linux-x86_64.tar.gz
 
-RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-10.1.0.tar.gz \
-    && tar zxf /opt/gcc-10.1.0.tar.gz -C /opt \
-    && cd /opt/gcc-releases-gcc-10.1.0 \
+RUN wget --no-check-certificate --quiet -O /opt/gcc-8.4.0.tar.gz https://github.com/gcc-mirror/gcc/archive/releases/gcc-8.4.0.tar.gz \
+    && tar zxf /opt/gcc-8.4.0.tar.gz -C /opt \
+    && cd /opt/gcc-releases-gcc-8.4.0 \
     && ./configure --prefix=/usr/local \
                    --enable-languages=c,c++ \
                    --disable-bootstrap \
