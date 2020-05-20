@@ -72,7 +72,8 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
                    --disable-checking \
     && make -j "$(nproc)" \
     && make install \
-    && cd -
+    && cd - \
+    && rm -rf /opt/gcc*
 
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
