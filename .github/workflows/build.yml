@@ -9,6 +9,17 @@ jobs:
       run: docker build . -t uilianries/gcc10
     - name: Inspect Docker image GCC10
       run: docker inspect uilianries/gcc10
+    - name: Test Docker Image
+      run: |
+        docker run -t -d --name runner conanio/gcc10
+        docker exec runner conan profile new default --detect
+        docker exec runner conan install lz4/1.9.2@ -s build_type=Release --build
+        docker exec runner conan install lz4/1.9.2@ -s build_type=Debug --build
+        docker exec runner conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++ -s build_type=Release
+        docker exec runner conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++11 -s build_type=Release
+        docker exec runner conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++ -s build_type=Debug
+        docker exec runner conan install gtest/1.10.0@ --build -s compiler.libcxx=libstdc++11 -s build_type=Debug
+        docker stop runner
     - name: Docker login
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
