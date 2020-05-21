@@ -70,7 +70,7 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
                    --with-mpfr=/usr/lib \
                    --disable-checking \
     && make -j "$(nproc)" \
-    && make install \
+    && make install-strip \
     && cd - \
     && rm -rf /opt/gcc* \
     && apt-get remove -y gcc \
@@ -80,8 +80,8 @@ RUN wget --no-check-certificate --quiet -O /opt/gcc-10.1.0.tar.gz https://github
     && update-alternatives --install /usr/bin/g++ g++ /usr/local/bin/g++ 100 \
     && update-alternatives --install /usr/bin/c++ c++ /usr/local/bin/g++ 100 \
     && update-alternatives --install /usr/bin/cpp cpp /usr/local/bin/g++ 100 \
-    && printf "/usr/local/lib" >> /etc/ld.so.conf \
-    && ldconfig
+    && printf "/usr/local/lib64" > /etc/ld.so.conf.d/local-lib64.conf \
+    && ldconfig -v
 
 RUN groupadd 1001 -g 1001 \
     && groupadd 1000 -g 1000 \
